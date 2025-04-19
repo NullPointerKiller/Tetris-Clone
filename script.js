@@ -107,4 +107,94 @@ function draw() {
     text(currentLevel, 560, 260);
     text(linesCleared, 560, 330);
 
+    //game border
+    stroke(colorDark);
+    line(gameEdgeRight, 0, gameEdgeRight, height);
+
+    fallingPiece.show();
+
+    if (keyIsDown(DOWN_ARROW)) {
+        updateEvery = 2;
+    }
+    else {
+        updateEvery = updateEveryCurrent;
+    }
+
+    if (!pauseGame) {
+        ticks++;
+        if (ticks >= updateEvery) {
+            ticks = 0;
+            fallingPiece.fall(fallSpeed);
+        }
+    }
+
+    for (let i = 0; i < gridPieces.length; i++) {
+        gridPieces[i].show();
+    }
+
+    for (let i = 0; i < lineFades.length; i++) {
+        lineFades[i].show();
+    }
+
+    if (gridWorkers.length > 0) {
+        gridWorkers[0].work();
+    }
+
+    //mostrar controles
+    textAlign(CENTER);
+    fill(255);
+    noStroke();
+    textSize(14);
+    text("Controles: \n🠕\n🠔 🠗 🠖\n", 75, 155);
+    text("Esquerda e Direita: \n Mover de um lado para o outro", 75, 230);
+    text("Cima: \n Rotacionar Peça", 75, 280);
+    text("Baixo: \n Cair rapidamente", 75, 330);
+    text("R:\n Reiniciar Jogo", 75, 380);
+
+    if (gameOver) {
+        fill(colorDark);
+        textSize(CENTER);
+        text("Game Over!", 300, 270);
+    }
+
+    strokeWeight(3);
+    stroke('#304550');
+    noFill();
+    rect(0, 0, width, height);
+}
+
+function keyPressed() {
+    if (keyCode === 82) {
+        //tecla R
+        resetGame();
+    }
+
+    if (!pauseGame) {
+        if (keyCode === LEFT_ARROW) {
+            fallingPiece.input(LEFT_ARROW);
+        } else if (keyCode === RIGHT_ARROW) {
+            fallingPiece.input(RIGHT_ARROW);
+        }
+
+        if (keyCode === UP_ARROW)
+            fallingPiece.input(UP_ARROW);
+
+    }
+}
+
+class PlayPiece {
+    constructor() {
+        this.pos = creatVector(0, 0);
+        this.rotation = 0;
+        this.nextPieceType = Math.floor(Math.random() * 7);
+        this.nextPieces = [];
+        this.pieceType = 0;
+        this.pieces = [];
+        this.orientation = [];
+        this.fallen = false;
+
+    }
+
+
+
 }
